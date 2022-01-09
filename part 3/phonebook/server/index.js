@@ -23,7 +23,6 @@ app.use(
     ":method :url :status :response-time ms - :res[content-length] :body - :req[content-length]"
   )
 );
-
 // const requestLogger = (request, response, next) => {
 //   console.log("Method:", request.method);
 //   console.log("Path:  ", request.path);
