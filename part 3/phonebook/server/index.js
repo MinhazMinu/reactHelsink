@@ -1,9 +1,10 @@
+const { v4: uuidv4 } = require("uuid");
 const { request, response } = require("express");
 const express = require("express");
 const app = express();
 app.use(express.json());
 
-const persons = [
+let persons = [
   {
     id: 1,
     name: "Arto Hellas",
@@ -46,6 +47,19 @@ app.get("/info", (request, response) => {
   response.send(
     `Phonebook has info for ${peopleCount} people <br/>  ${currentTime}`
   );
+});
+
+app.delete("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id);
+  persons = persons.filter((person) => person.id !== id);
+  response.status(204).end();
+});
+
+app.post("/api/persons", (request, response) => {
+  const person = request.body;
+  person.id = uuidv4();
+  persons = persons.concat(person);
+  response.json(persons);
 });
 
 const PORT = 3001;
