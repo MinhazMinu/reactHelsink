@@ -1,4 +1,6 @@
-const { request, response } = require("express");
+// create server with Express
+
+const { response } = require("express");
 const express = require("express");
 const app = express();
 app.use(express.json());
@@ -25,41 +27,43 @@ let notes = [
 ];
 
 app.get("/", (request, response) => {
-  response.send("node js");
+  response.send("<h1>Node Js</h1>");
 });
 
 app.get("/api/notes", (request, response) => {
-  response.send(notes);
+  response.json(notes);
 });
 
 app.get("/api/notes/:id", (request, response) => {
   const id = Number(request.params.id);
-  console.log(request);
   const note = notes.find((note) => note.id === id);
-  note ? response.json(note) : response.status(404).end();
-});
-
-app.delete("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  notes = notes.filter((note) => note.id !== id);
-  response.status(204).end();
+  if (note) {
+    response.json(note);
+  } else {
+    response.status(404).send("No Data Found");
+  }
 });
 
 app.post("/api/notes", (request, response) => {
-  const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
-
   const note = request.body;
-  note.id = maxId + 1;
-  notes = notes.concat(note);
   console.log(note);
   response.json(note);
 });
 
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`server running ${PORT}`);
+app.delete("/app/notes/:id", (request, response) => {
+  const id = Number(request.params.id);
+  notes = notes.filter((note) => note.id !== id);
+
+  response.status(204).end();
 });
 
+const PORT = 3001;
+
+app.listen(PORT, () => {
+  console.log(`server is running in port ${PORT}`);
+});
+
+// Create server without Express
 // const http = require("http");
 
 // let notes = [
@@ -89,5 +93,6 @@ app.listen(PORT, () => {
 // });
 
 // const PORT = 3001;
+
 // app.listen(PORT);
-// console.log(`Server running ${PORT}`);
+// console.log(`server is running in port ${PORT}`);
